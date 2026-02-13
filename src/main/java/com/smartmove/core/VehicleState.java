@@ -1,4 +1,4 @@
-﻿package com.smartmove.core;
+package com.smartmove.core;
 
 public enum VehicleState {
     AVAILABLE,

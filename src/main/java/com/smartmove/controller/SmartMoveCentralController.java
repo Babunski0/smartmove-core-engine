@@ -1,4 +1,4 @@
-﻿package com.smartmove.controller;
+package com.smartmove.controller;
 
 public class SmartMoveCentralController {
 }
