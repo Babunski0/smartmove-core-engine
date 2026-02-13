@@ -1,0 +1,6 @@
+package com.smartmove.controller;
+
+public enum VehicleAction {
+    RESERVE,
+    CANCEL_RESERVATION
+}
