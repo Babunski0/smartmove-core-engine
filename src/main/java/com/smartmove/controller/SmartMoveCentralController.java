@@ -24,4 +24,22 @@ public class SmartMoveCentralController {
         }
         vehicle.setState(VehicleState.AVAILABLE);
     }
+    
+    public void startRental(Vehicle vehicle) {
+        Objects.requireNonNull(vehicle);
+
+        if (vehicle.getState() != VehicleState.RESERVED) {
+            throw new IllegalStateException("Vehicle must be RESERVED to start rental");
+        }
+        vehicle.setState(VehicleState.IN_USE);
+    }
+
+    public void endRental(Vehicle vehicle) {
+        Objects.requireNonNull(vehicle);
+
+        if (vehicle.getState() != VehicleState.IN_USE) {
+            throw new IllegalStateException("Vehicle must be IN_USE to end rental");
+        }
+        vehicle.setState(VehicleState.AVAILABLE);
+    }
 }
