@@ -1,13 +1,17 @@
 package com.smartmove;
 
+import org.springframework.boot.SpringApplication;
+import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.scheduling.annotation.EnableScheduling;
+
 /**
  * Hello world!
  *
  */
-public class App 
-{
-    public static void main( String[] args )
-    {
-        System.out.println( "Hello World!" );
+@SpringBootApplication
+@EnableScheduling
+public class SmartMoveApp {
+    public static void main(String[] args) {
+        SpringApplication.run(SmartMoveApp.class, args);
     }
 }

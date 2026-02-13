@@ -45,16 +45,45 @@ git config user.name "Your Name"
 git config user.email "your.email@example.com"
 ```
 
-### 3. Build the Project
+### 3. Setup Environment Variables
+```bash
+# Copy the template
+cp .env.example .env
+
+# Edit and add your SonarQube token (see SonarQube Setup section)
+# Your .env file is in .gitignore and never committed to Git
+```
+
+### 4. Build the Project
 ```bash
 mvn clean install
 ```
 
-This will:
-- Compile the source code
-- Run all tests
-- Package the application
-- Install it to your local Maven repository
+## Running the Application
+
+### Start the Application
+```bash
+mvn spring-boot:run
+```
+
+The application will start on: **http://localhost:8080/smartmove**
+
+### Test the Health Endpoint
+```bash
+curl http://localhost:8080/smartmove/actuator/health
+# Response: {"status":"UP"}
+```
+
+### Build and Package
+```bash
+mvn clean package
+# JAR file: target/smartmove-core-1.0-SNAPSHOT.jar
+```
+
+### Run Tests
+```bash
+mvn clean test
+```
 
 ## SonarQube Setup
 
@@ -97,35 +126,7 @@ Wait 2-3 minutes for SonarQube to start, then access it at: **http://localhost:9
 
 3. **Important:** The `.env` file is already in `.gitignore` and will never be committed to Git. This keeps your token secure.
 
-### 4. For Team Members
-
-When a new team member clones the project:
-1. They copy `.env.example` to `.env`
-2. They get the SonarQube token from the team (via secure channel)
-3. They paste it into their local `.env` file
-4. Their `.env` file stays on their machine only
-
-## Running the Application
-
-### Build and Run Tests
-```bash
-mvn clean test
-```
-
-### Package the Application
-```bash
-mvn clean package
-```
-
-The compiled JAR will be in `target/smartmove-core-1.0-SNAPSHOT.jar`
-
 ## Running Code Quality Analysis
-
-### Prerequisites
-- SonarQube must be running in Docker (see [SonarQube Setup](#sonarqube-setup))
-- `.env` file must be configured with your token
-
-### Run the Analysis
 
 **Windows (CMD):**
 ```cmd
@@ -168,24 +169,35 @@ After the analysis completes, view the results at:
 smartmove-core-engine/
 ├── src/
 │   ├── main/
-│   │   └── java/              # Application source code
+│   │   ├── java/com/smartmove/
+│   │   │   ├── App.java                 # Spring Boot application
+│   │   │   ├── domain/                  # Enums, entities, rules
+│   │   │   ├── dto/                     # Request/response DTOs
+│   │   │   ├── service/                 # Business logic
+│   │   │   ├── controller/              # REST endpoints
+│   │   │   ├── exception/               # Custom exceptions
+│   │   │   └── config/                  # Spring configuration
+│   │   └── resources/
+│   │       └── application.properties   # Configuration
 │   └── test/
-│       └── java/              # Test source code
-├── target/                    # Compiled classes and JARs (generated)
-├── .env                       # Environment variables (NOT in Git)
-├── .env.example               # Environment template (committed)
-├── .gitignore                 # Git ignore rules
-├── pom.xml                    # Maven configuration
-└── README.md                  # This file
+│       └── java/com/smartmove/          # Unit tests
+├── target/                              # Compiled JAR (generated)
+├── .env                                 # Environment variables (NOT in Git)
+├── .env.example                         # Environment template
+├── .gitignore                           # Git ignore rules
+├── pom.xml                              # Maven configuration
+└── README.md                            # This file
 ```
 
 ## Key Technologies
 
 - **Java 17** - Programming language
-- **Maven** - Build and dependency management
-- **JUnit 4** - Testing framework
-- **JaCoCo** - Code coverage analysis
-- **SonarQube** - Code quality and security analysis
+- **Spring Boot 3.1.11** - REST API framework
+- **JUnit 5** - Testing framework
+- **Mockito** - Mocking library
+- **Lombok** - Reduces boilerplate code
+- **JaCoCo** - Code coverage
+- **SonarQube** - Code quality and security
 
 ## Contributing
 
@@ -229,6 +241,19 @@ smartmove-core-engine/
 - **Follow Java coding conventions**
 
 ## Troubleshooting
+
+### Application Won't Start
+```bash
+# Check if port 8080 is in use
+lsof -i :8080
+
+# Kill process if needed (macOS/Linux)
+kill -9 <PID>
+
+# Try building again
+mvn clean install
+mvn spring-boot:run
+```
 
 ### SonarQube Container Not Running
 ```bash
