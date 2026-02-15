@@ -1,15 +1,22 @@
 package com.smartmove.domain.entity;
 
 import com.smartmove.domain.enums.City;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
+import java.time.Duration;
 import java.time.Instant;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @Data
+@NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class RentalSession {
 
@@ -30,34 +37,35 @@ public class RentalSession {
     private boolean completed;
 
     @Builder.Default
-    private Map<String, BigDecimal> additionalCharges = new HashMap<>();
+    private List<Map<String, Object>> additionalCharges = new ArrayList<>();
+
+    public RentalSession(String rentalId, String vehicleId, String userId,
+                         City city, GPSLocation startLocation) {
+        this.rentalId = rentalId;
+        this.vehicleId = vehicleId;
+        this.userId = userId;
+        this.city = city;
+        this.startLocation = startLocation;
+        this.startTime = Instant.now();
+        this.additionalCharges = new ArrayList<>();
+        this.completed = false;
+    }
 
     public void endRental(GPSLocation endLocation) {
-        if (this.completed) {
-            return;
-        }
         this.endLocation = endLocation;
         this.endTime = Instant.now();
         this.completed = true;
     }
 
-    public void addCharge(String reason, double amount) {
-        if (reason == null || reason.isBlank()) {
-            throw new IllegalArgumentException("Charge reason must not be blank");
-        }
-        if (amount < 0) {
-            throw new IllegalArgumentException("Charge amount must be >= 0");
-        }
-        additionalCharges.put(reason, BigDecimal.valueOf(amount));
+    public void addCharge(String chargeType, double amount) {
+        Map<String, Object> charge = new HashMap<>();
+        charge.put("type", chargeType);
+        charge.put("amount", amount);
+        charge.put("timestamp", Instant.now());
+        additionalCharges.add(charge);
     }
 
     public long getDurationMinutes() {
-        Instant end = (endTime != null) ? endTime : Instant.now();
-        Instant start = (startTime != null) ? startTime : end;
-        return Math.max(0, (end.toEpochMilli() - start.toEpochMilli()) / 60000);
-    }
-
-    public boolean isCompleted() {
-        return completed;
+        return Duration.between(endTime, startTime).toMinutes();
     }
 }
