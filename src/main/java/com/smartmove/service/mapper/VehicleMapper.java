@@ -1,4 +1,4 @@
-package com.smartmove.mapper;
+package com.smartmove.service.mapper;
 
 import com.smartmove.domain.entity.Bicycle;
 import com.smartmove.domain.entity.GPSLocation;
