@@ -33,7 +33,7 @@ public class Moped extends Vehicle {
     @Override
     public List<String> getRequiredMaintenanceChecks() {
         return List.of(
-                "Engine Oil",
+                "Oil level",
                 "Spark Plug",
                 "Brake Fluid",
                 "Helmet Sensor",
