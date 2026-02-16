@@ -1,19 +1,12 @@
 package com.smartmove.dto.response;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
-import com.fasterxml.jackson.annotation.JsonInclude;
-
-@Data
+@Getter @Setter
+@Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
-@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ApiResponse<T> {
-
     private boolean success;
     private String message;
     private T data;
@@ -24,3 +17,5 @@ public class ApiResponse<T> {
         this.message = message;
         this.data = data;
         this.timestamp = System.currentTimeMillis();
+    }
+}
