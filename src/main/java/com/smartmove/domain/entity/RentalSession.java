@@ -7,12 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.time.Duration;
-import java.time.Instant;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 
 @Data
 @NoArgsConstructor
@@ -35,37 +29,4 @@ public class RentalSession {
     private String costCurrency;
 
     private boolean completed;
-
-    @Builder.Default
-    private List<Map<String, Object>> additionalCharges = new ArrayList<>();
-
-    public RentalSession(String rentalId, String vehicleId, String userId,
-                         City city, GPSLocation startLocation) {
-        this.rentalId = rentalId;
-        this.vehicleId = vehicleId;
-        this.userId = userId;
-        this.city = city;
-        this.startLocation = startLocation;
-        this.startTime = Instant.now();
-        this.additionalCharges = new ArrayList<>();
-        this.completed = false;
-    }
-
-    public void endRental(GPSLocation endLocation) {
-        this.endLocation = endLocation;
-        this.endTime = Instant.now();
-        this.completed = true;
-    }
-
-    public void addCharge(String chargeType, double amount) {
-        Map<String, Object> charge = new HashMap<>();
-        charge.put("type", chargeType);
-        charge.put("amount", amount);
-        charge.put("timestamp", Instant.now());
-        additionalCharges.add(charge);
-    }
-
-    public long getDurationMinutes() {
-        return Duration.between(endTime, startTime).toMinutes();
-    }
 }
