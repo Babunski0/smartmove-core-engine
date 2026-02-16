@@ -1,0 +1,212 @@
+[
+  {
+    "rentalId": "rental-001",
+    "vehicleId": "scooter-001",
+    "userId": "user-123",
+    "city": "LONDON",
+    "startTime": 1707849600000,
+    "endTime": 1707853200000,
+    "startLocation": {
+      "latitude": 51.5074,
+      "longitude": -0.1278,
+      "timestamp": 1707849600000
+    },
+    "endLocation": {
+      "latitude": 51.51,
+      "longitude": -0.12,
+      "timestamp": 1707853200000
+    },
+    "totalCostAmount": 12.5,
+    "costCurrency": "GBP",
+    "completed": true,
+    "additionalCharges": [
+      {
+        "type": "CONGESTION_CHARGE",
+        "amount": 8,
+        "timestamp": 1707853200000
+      }
+    ]
+  },
+  {
+    "rentalId": "rental-002",
+    "vehicleId": "bike-003",
+    "userId": "user-456",
+    "city": "STOCKHOLM",
+    "startTime": 1707840000000,
+    "endTime": 0,
+    "startLocation": {
+      "latitude": 59.3293,
+      "longitude": 18.0686,
+      "timestamp": 1707840000000
+    },
+    "endLocation": null,
+    "totalCostAmount": 0,
+    "costCurrency": "SEK",
+    "completed": false,
+    "additionalCharges": []
+  },
+  {
+    "rentalId": "rental-003",
+    "vehicleId": "moped-001",
+    "userId": "user-789",
+    "city": "ROME",
+    "startTime": 1707835200000,
+    "endTime": 1707838800000,
+    "startLocation": {
+      "latitude": 41.9028,
+      "longitude": 12.4964,
+      "timestamp": 1707835200000
+    },
+    "endLocation": {
+      "latitude": 41.905,
+      "longitude": 12.5,
+      "timestamp": 1707838800000
+    },
+    "totalCostAmount": 22.5,
+    "costCurrency": "EUR",
+    "completed": true,
+    "additionalCharges": []
+  },
+  {
+    "rentalId": "rental-004",
+    "vehicleId": "scooter-002",
+    "userId": "user-012",
+    "city": "LONDON",
+    "startTime": 1707830400000,
+    "endTime": 0,
+    "startLocation": {
+      "latitude": 51.515,
+      "longitude": -0.115,
+      "timestamp": 1707830400000
+    },
+    "endLocation": null,
+    "totalCostAmount": 0,
+    "costCurrency": "GBP",
+    "completed": false,
+    "additionalCharges": []
+  },
+  {
+    "rentalId": "rental-005",
+    "vehicleId": "scooter-003",
+    "userId": "user-345",
+    "city": "STOCKHOLM",
+    "startTime": 1707825600000,
+    "endTime": 1707829200000,
+    "startLocation": {
+      "latitude": 59.332,
+      "longitude": 18.07,
+      "timestamp": 1707825600000
+    },
+    "endLocation": {
+      "latitude": 59.335,
+      "longitude": 18.075,
+      "timestamp": 1707829200000
+    },
+    "totalCostAmount": 97.5,
+    "costCurrency": "SEK",
+    "completed": true,
+    "additionalCharges": []
+  },
+  {
+    "rentalId": "rental-006",
+    "vehicleId": "bike-004",
+    "userId": "user-678",
+    "city": "MILAN",
+    "startTime": 1707820800000,
+    "endTime": 1707824400000,
+    "startLocation": {
+      "latitude": 45.4642,
+      "longitude": 9.19,
+      "timestamp": 1707820800000
+    },
+    "endLocation": {
+      "latitude": 45.47,
+      "longitude": 9.195,
+      "timestamp": 1707824400000
+    },
+    "totalCostAmount": 3.5,
+    "costCurrency": "EUR",
+    "completed": true,
+    "additionalCharges": []
+  },
+  {
+    "rentalId": "rental-007",
+    "vehicleId": "moped-003",
+    "userId": "user-901",
+    "city": "STOCKHOLM",
+    "startTime": 1707816000000,
+    "endTime": 0,
+    "startLocation": {
+      "latitude": 59.335,
+      "longitude": 18.075,
+      "timestamp": 1707816000000
+    },
+    "endLocation": null,
+    "totalCostAmount": 0,
+    "costCurrency": "SEK",
+    "completed": false,
+    "additionalCharges": []
+  },
+  {
+    "rentalId": "rental-008",
+    "vehicleId": "bike-001",
+    "userId": "user-234",
+    "city": "LONDON",
+    "startTime": 1707811200000,
+    "endTime": 1707814800000,
+    "startLocation": {
+      "latitude": 51.5074,
+      "longitude": -0.1278,
+      "timestamp": 1707811200000
+    },
+    "endLocation": {
+      "latitude": 51.512,
+      "longitude": -0.122,
+      "timestamp": 1707814800000
+    },
+    "totalCostAmount": 5,
+    "costCurrency": "GBP",
+    "completed": true,
+    "additionalCharges": []
+  },
+  {
+    "rentalId": "rental-009",
+    "vehicleId": "scooter-004",
+    "userId": "user-567",
+    "city": "BERLIN",
+    "startTime": 1707806400000,
+    "endTime": 1707810000000,
+    "startLocation": {
+      "latitude": 52.52,
+      "longitude": 13.405,
+      "timestamp": 1707806400000
+    },
+    "endLocation": {
+      "latitude": 52.525,
+      "longitude": 13.41,
+      "timestamp": 1707810000000
+    },
+    "totalCostAmount": 10.5,
+    "costCurrency": "EUR",
+    "completed": true,
+    "additionalCharges": []
+  },
+  {
+    "rentalId": "rental-010",
+    "vehicleId": "bike-005",
+    "userId": "user-890",
+    "city": "PARIS",
+    "startTime": 1707801600000,
+    "endTime": 0,
+    "startLocation": {
+      "latitude": 48.8566,
+      "longitude": 2.3522,
+      "timestamp": 1707801600000
+    },
+    "endLocation": null,
+    "totalCostAmount": 0,
+    "costCurrency": "EUR",
+    "completed": false,
+    "additionalCharges": []
+  }
+]
