@@ -22,6 +22,18 @@ import java.util.List;
  * @created 16.02.2026
  */
 
+/**
+ * This repository reads and writes Vehicle data from/to JSON files.
+ * No database needed - just JSON files in the filesystem.
+ *
+ * Features:
+ * - Load all vehicles from JSON file
+ * - Load vehicle by ID
+ * - Save vehicle (single or bulk)
+ * - Delete vehicle
+ * - Query by city and state
+ * - Get vehicle count
+ */
 @Repository
 @RequiredArgsConstructor
 @Slf4j
