@@ -7,7 +7,6 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.math.BigDecimal;
-import java.time.LocalDateTime;
 
 @Data
 @NoArgsConstructor
@@ -18,11 +17,10 @@ public class RentalSession {
     private String rentalId;
     private String vehicleId;
     private String userId;
-
     private City city;
 
-    private LocalDateTime startTime;
-    private LocalDateTime endTime;
+    private Instant startTime;
+    private Instant endTime;
 
     private GPSLocation startLocation;
     private GPSLocation endLocation;
