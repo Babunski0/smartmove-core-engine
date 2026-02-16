@@ -5,6 +5,7 @@ import com.smartmove.domain.enums.VehicleState;
 import com.smartmove.domain.enums.VehicleType;
 import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
@@ -18,6 +19,7 @@ import java.util.List;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
+@EqualsAndHashCode
 public abstract class Vehicle {
 
     protected String vehicleId;
@@ -48,7 +50,7 @@ public abstract class Vehicle {
     public abstract int getMaintenanceIntervalHours();
     public abstract List<String> getRequiredMaintenanceChecks();
 
-    protected void setState(VehicleState newState) {
+    public void setState(VehicleState newState) {
         this.currentState = newState;
     }
 
@@ -64,15 +66,7 @@ public abstract class Vehicle {
         this.temperatureCelsius = celsius;
     }
 
-    protected void setActiveRentalId(String rentalId) {
-        this.activeRentalId = rentalId;
-    }
-
-    protected void setLocked(boolean locked) {
-        this.locked = locked;
-    }
-
-    protected void updateLastTelemetry() {
+    public void updateLastTelemetry() {
         this.lastTelemetryUpdate = System.currentTimeMillis();
     }
 }

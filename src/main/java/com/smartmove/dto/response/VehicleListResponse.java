@@ -11,7 +11,7 @@ public class VehicleListResponse {
     private String type;
     private String city;
     private String state;
-    private Integer batteryPercentage;
+    private Double batteryPercentage;
     private boolean locked;
     private Double hourlyRate;
 }

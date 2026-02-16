@@ -19,7 +19,7 @@ public class VehicleResponse {
     private double longitude;
     private Instant locationTimestamp;
 
-    private Integer batteryPercentage;
+    private Double batteryPercentage;
     private Double temperatureCelsius;
     private String activeRentalId;
 
