@@ -52,15 +52,15 @@ public abstract class Vehicle {
         this.currentState = newState;
     }
 
-    protected void setLocation(GPSLocation location) {
+    public void setLocation(GPSLocation location) {
         this.currentLocation = location;
     }
 
-    protected void setBatteryPercentage(double percentage) {
+    public void setBatteryPercentage(double percentage) {
         this.batteryPercentage = Math.max(0, Math.min(100, percentage));
     }
 
-    protected void setTemperature(double celsius) {
+    public void setTemperature(double celsius) {
         this.temperatureCelsius = celsius;
     }
 
