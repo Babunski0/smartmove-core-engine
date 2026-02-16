@@ -9,6 +9,9 @@ import java.util.Map;
 @NoArgsConstructor
 @AllArgsConstructor
 public class ErrorResponse {
+    private int status;
     private String error;
+    private String message;
+    private Long timestamp;
     private Map<String, String> fieldErrors;
 }
