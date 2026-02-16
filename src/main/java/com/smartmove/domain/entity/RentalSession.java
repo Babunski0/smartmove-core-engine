@@ -68,4 +68,10 @@ public class RentalSession {
     public long getDurationMinutes() {
         return Duration.between(endTime, startTime).toMinutes();
     }
+
+    public Double getTotalAdditionalCharges() {
+        return additionalCharges.stream()
+                .mapToDouble(charge -> ((Number) charge.get("amount")).doubleValue())
+                .sum();
+    }
 }
