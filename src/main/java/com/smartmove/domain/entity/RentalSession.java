@@ -52,7 +52,7 @@ public class RentalSession {
 	private GPSLocation startLocation;
 	private GPSLocation endLocation;
 
-	private BigDecimal totalCostAmount;
+	private Double totalCostAmount;
 	private String costCurrency;
 
 	private boolean completed;
