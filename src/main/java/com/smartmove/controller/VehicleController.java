@@ -55,12 +55,11 @@ public class VehicleController {
         try {
             List<VehicleListResponse> vehicles = vehicleService.getAllVehicles();
 
-            ApiResponse<List<VehicleListResponse>> response = ApiResponse.builder()
-                    .success(true)
-                    .message("Vehicles retrieved successfully")
-                    .data(vehicles)
-                    .timestamp(System.currentTimeMillis())
-                    .build();
+            ApiResponse<List<VehicleListResponse>> response = new ApiResponse<>(
+                    true,
+                    "Vehicles retrieved successfully",
+                    vehicles
+            );
 
             return ResponseEntity.ok(response);
         } catch (Exception e) {
@@ -83,12 +82,11 @@ public class VehicleController {
         try {
             List<VehicleListResponse> vehicles = vehicleService.getVehiclesByCity(city);
 
-            ApiResponse<List<VehicleListResponse>> response = ApiResponse.builder()
-                    .success(true)
-                    .message("Vehicles in " + city + " retrieved successfully")
-                    .data(vehicles)
-                    .timestamp(System.currentTimeMillis())
-                    .build();
+            ApiResponse<List<VehicleListResponse>> response = new ApiResponse<>(
+                    true,
+                    "Vehicles in " + city + " retrieved successfully",
+                    vehicles
+            );
 
             return ResponseEntity.ok(response);
         } catch (Exception e) {
@@ -111,12 +109,11 @@ public class VehicleController {
         try {
             List<VehicleListResponse> vehicles = vehicleService.getVehiclesByState(state);
 
-            ApiResponse<List<VehicleListResponse>> response = ApiResponse.builder()
-                    .success(true)
-                    .message("Vehicles with state " + state + " retrieved successfully")
-                    .data(vehicles)
-                    .timestamp(System.currentTimeMillis())
-                    .build();
+            ApiResponse<List<VehicleListResponse>> response = new ApiResponse<>(
+                    true,
+                    "Vehicles with state " + state + " retrieved successfully",
+                    vehicles
+            );
 
             return ResponseEntity.ok(response);
         } catch (Exception e) {
@@ -139,12 +136,11 @@ public class VehicleController {
         try {
             VehicleResponse vehicle = vehicleService.getVehicleStatus(vehicleId);
 
-            ApiResponse<VehicleResponse> response = ApiResponse.builder()
-                    .success(true)
-                    .message("Vehicle status retrieved successfully")
-                    .data(vehicle)
-                    .timestamp(System.currentTimeMillis())
-                    .build();
+            ApiResponse<VehicleResponse> response = new ApiResponse<>(
+                    true,
+                    "Vehicle status retrieved successfully",
+                    vehicle
+            );
 
             return ResponseEntity.ok(response);
         } catch (Exception e) {
@@ -174,12 +170,11 @@ public class VehicleController {
         try {
             VehicleResponse vehicle = vehicleService.createVehicle(request);
 
-            ApiResponse<VehicleResponse> response = ApiResponse.builder()
-                    .success(true)
-                    .message("Vehicle created successfully")
-                    .data(vehicle)
-                    .timestamp(System.currentTimeMillis())
-                    .build();
+            ApiResponse<VehicleResponse> response = new ApiResponse<>(
+                    true,
+                    "Vehicle created successfully",
+                    vehicle
+            );
 
             return ResponseEntity
                     .status(HttpStatus.CREATED)
@@ -213,12 +208,11 @@ public class VehicleController {
         try {
             VehicleResponse vehicle = vehicleService.updateVehicle(vehicleId, request);
 
-            ApiResponse<VehicleResponse> response = ApiResponse.builder()
-                    .success(true)
-                    .message("Vehicle updated successfully")
-                    .data(vehicle)
-                    .timestamp(System.currentTimeMillis())
-                    .build();
+            ApiResponse<VehicleResponse> response = new ApiResponse<>(
+                    true,
+                    "Vehicle updated successfully",
+                    vehicle
+            );
 
             return ResponseEntity.ok(response);
         } catch (Exception e) {
@@ -236,18 +230,18 @@ public class VehicleController {
      * @return Success confirmation
      */
     @DeleteMapping("/{vehicleId}")
-    public ResponseEntity<ApiResponse<Void>> deleteVehicle(
+    public ResponseEntity<ApiResponse<String>> deleteVehicle(
             @PathVariable String vehicleId) {
         log.info("DELETE /api/v1/vehicles/{} - Delete vehicle", vehicleId);
 
         try {
             vehicleService.deleteVehicle(vehicleId);
 
-            ApiResponse<Void> response = ApiResponse.builder()
-                    .success(true)
-                    .message("Vehicle deleted successfully")
-                    .timestamp(System.currentTimeMillis())
-                    .build();
+            ApiResponse<String> response = new ApiResponse<>(
+                    true,
+                    "Vehicle deleted successfully",
+                    null
+            );
 
             return ResponseEntity
                     .status(HttpStatus.NO_CONTENT)
@@ -272,12 +266,11 @@ public class VehicleController {
         try {
             int count = vehicleService.getVehicleCount();
 
-            ApiResponse<Integer> response = ApiResponse.builder()
-                    .success(true)
-                    .message("Vehicle count retrieved successfully")
-                    .data(count)
-                    .timestamp(System.currentTimeMillis())
-                    .build();
+            ApiResponse<Integer> response = new ApiResponse<>(
+                    true,
+                    "Vehicle count retrieved successfully",
+                    count
+            );
 
             return ResponseEntity.ok(response);
         } catch (Exception e) {

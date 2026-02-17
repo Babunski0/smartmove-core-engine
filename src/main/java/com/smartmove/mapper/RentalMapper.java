@@ -29,7 +29,7 @@ public class RentalMapper {
         return RentalResponse.builder()
                 .rentalId(rental.getRentalId())
                 .vehicleId(rental.getVehicleId())
-                .userId(rental.getUser().getuserId)  // Extract userId from User object
+                .userId(rental.getUser().getUserId())  // Extract userId from User object
                 .city(rental.getCity())
                 .durationMinutes(rental.getDurationMinutes())
                 .totalCostAmount(rental.getTotalCostAmount())
