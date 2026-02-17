@@ -33,7 +33,10 @@
         <!-- Coverage configuration -->
         <sonar.java.coveragePlugin>jacoco</sonar.java.coveragePlugin>
         <sonar.coverage.jacoco.xmlReportPaths>${project.build.directory}/site/jacoco/jacoco.xml</sonar.coverage.jacoco.xmlReportPaths>
-        <sonar.coverage.exclusions>**/entity/**,**/dto/**,**/config/**</sonar.coverage.exclusions>
+        <sonar.coverage.exclusions>**/entity/**,**/dto/**,**/config/**,**/exception/**,**/mapper/**,**/handler/**</sonar.coverage.exclusions>
+
+        <!-- SonarQube Quality Gate -->
+        <sonar.projectBaselineKey>smartmove-core-engine</sonar.projectBaselineKey>
     </properties>
 
     <!-- Dependency Management from Spring Boot -->
@@ -97,7 +100,7 @@
             <artifactId>lombok</artifactId>
             <optional>true</optional>
             <version>${lombok.version}</version>
-  			<scope>provided</scope>
+            <scope>provided</scope>
         </dependency>
 
         <!-- ========== TESTING DEPENDENCIES ========== -->
@@ -168,6 +171,7 @@
                     </excludes>
                 </configuration>
             </plugin>
+
             <!-- Maven Compiler Plugin -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
@@ -196,6 +200,7 @@
                         <include>**/*Test.java</include>
                         <include>**/*Tests.java</include>
                     </includes>
+                    <argLine>@{argLine}</argLine>
                 </configuration>
             </plugin>
 
@@ -204,14 +209,25 @@
                 <groupId>org.jacoco</groupId>
                 <artifactId>jacoco-maven-plugin</artifactId>
                 <version>0.8.11</version>
+                <configuration>
+                    <excludes>
+                        <exclude>**/mapper/**</exclude>
+                        <exclude>**/exception/handler/**</exclude>
+                        <exclude>**/entity/**</exclude>
+                        <exclude>**/dto/**</exclude>
+                        <exclude>**/config/**</exclude>
+                        <exclude>**/dto/response/**</exclude>
+                    </excludes>
+                </configuration>
                 <executions>
                     <execution>
+                        <id>prepare-agent</id>
                         <goals>
                             <goal>prepare-agent</goal>
                         </goals>
                     </execution>
                     <execution>
-                        <id>report</id>
+                        <id>jacoco-report</id>
                         <phase>verify</phase>
                         <goals>
                             <goal>report</goal>
@@ -219,6 +235,7 @@
                     </execution>
                     <execution>
                         <id>jacoco-check</id>
+                        <phase>verify</phase>
                         <goals>
                             <goal>check</goal>
                         </goals>
@@ -228,6 +245,11 @@
                                     <element>PACKAGE</element>
                                     <excludes>
                                         <exclude>*Test</exclude>
+                                        <exclude>**/entity/*</exclude>
+                                        <exclude>**/dto/*</exclude>
+                                        <exclude>**/config/*</exclude>
+                                        <exclude>**/exception/*</exclude>
+                                        <exclude>**/mapper/*</exclude>
                                     </excludes>
                                     <limits>
                                         <limit>

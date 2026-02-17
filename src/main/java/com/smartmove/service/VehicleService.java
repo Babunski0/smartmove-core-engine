@@ -10,6 +10,7 @@ import com.smartmove.mapper.VehicleMapper;
 import com.smartmove.repository.FileBasedVehicleRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -28,6 +29,16 @@ public class VehicleService {
     private final FileBasedVehicleRepository vehicleRepository;
     private final VehicleLockManager lockManager;
     private final VehicleMapper vehicleMapper;
+
+    // ========== CONFIGURATION PROPERTIES ==========
+    @Value("${smartmove.data.vehicles-file:./data/vehicles.json}")
+    private String vehiclesFile;
+
+    @Value("${smartmove.data.rentals-file:./data/rentals.json}")
+    private String rentalsFile;
+
+    @Value("${smartmove.data.users-file:./data/users.json}")
+    private String usersFile;
 
     /**
      * Get all vehicles

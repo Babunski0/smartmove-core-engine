@@ -23,6 +23,16 @@ public class VehicleLockManager {
      */
     private final ConcurrentHashMap<String, ReadWriteLock> locks = new ConcurrentHashMap<>();
 
+    // ========== CONFIGURATION PROPERTIES ==========
+    @Value("${smartmove.data.vehicles-file:./data/vehicles.json}")
+    private String vehiclesFile;
+
+    @Value("${smartmove.data.rentals-file:./data/rentals.json}")
+    private String rentalsFile;
+
+    @Value("${smartmove.data.users-file:./data/users.json}")
+    private String usersFile;
+
     /**
      * Lock acquisition timeout in milliseconds
      */

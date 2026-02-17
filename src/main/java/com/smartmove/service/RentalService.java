@@ -1,10 +1,5 @@
 package com.smartmove.service;
 
-/**
- * @author jniyi
- * @project smartmove-core-engine - 2026
- * @created 17.02.2026
- */
 
 import com.smartmove.domain.entity.GPSLocation;
 import com.smartmove.domain.entity.RentalSession;
@@ -22,12 +17,20 @@ import com.smartmove.repository.FileBasedRentalRepository;
 import com.smartmove.repository.FileBasedUserRepository;
 import com.smartmove.repository.FileBasedVehicleRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.beans.factory.annotation.Value;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.UUID;
+
+
+/**
+ * @author jniyi
+ * @project smartmove-core-engine - 2026
+ * @created 17.02.2026
+ */
 
 /**
  * SmartMoveRentalService - Core rental management business logic
