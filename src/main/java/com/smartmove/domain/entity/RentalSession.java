@@ -1,5 +1,7 @@
 package com.smartmove.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 import com.smartmove.domain.enums.City;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -14,65 +16,98 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
+/**
+ * Represents a vehicle rental session.
+ *
+ * <p>This session stores the full {@link User} object for easier access to user details during rental operations.
+ * For persistence (JSON), only the {@code userId} value is stored. Jackson maps the JSON {@code userId} field
+ * through {@link #getUserId()} and {@link #setUserId(String)}.</p>
+ *
+ * <p>Examples:</p>
+ * <ul>
+ *   <li>User id: {@code rental.getUser().getUserId()}</li>
+ *   <li>User info: {@code rental.getUser().getFirstName()}, etc.</li>
+ * </ul>
+ */
+
+
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
 public class RentalSession {
 
-    private String rentalId;
-    private String vehicleId;
-    private String userId;
-    private City city;
+	private String rentalId;
+	private String vehicleId;
 
-    private Instant startTime;
-    private Instant endTime;
+	private User user;
 
-    private GPSLocation startLocation;
-    private GPSLocation endLocation;
+	private City city;
 
-    private BigDecimal totalCostAmount;
-    private String costCurrency;
+	private Instant startTime;
+	private Instant endTime;
 
-    private boolean completed;
+	private GPSLocation startLocation;
+	private GPSLocation endLocation;
+
+	private BigDecimal totalCostAmount;
+	private String costCurrency;
+
+	private boolean completed;
+
+	@Builder.Default
+	private List<Map<String, Object>> additionalCharges = new ArrayList<>();
+
+	public RentalSession(String rentalId, String vehicleId, User user, City city, GPSLocation startLocation) {
+		this.rentalId = rentalId;
+		this.vehicleId = vehicleId;
+		this.user = user;
+		this.city = city;
+		this.startLocation = startLocation;
+		this.startTime = Instant.now();
+		this.additionalCharges = new ArrayList<>();
+		this.completed = false;
+	}
+	
+	/**
+	 * JSON persistence proxy: stores only userId in JSON.
+	 */
 
 
-    @Builder.Default
-    private List<Map<String, Object>> additionalCharges = new ArrayList<>();
+	@JsonProperty("userId")
+	public String getUserId() {
+		return user != null ? user.getUserId() : null;
+	}
 
-    public RentalSession(String rentalId, String vehicleId, String userId,
-                         City city, GPSLocation startLocation) {
-        this.rentalId = rentalId;
-        this.vehicleId = vehicleId;
-        this.userId = userId;
-        this.city = city;
-        this.startLocation = startLocation;
-        this.startTime = Instant.now();
-        this.additionalCharges = new ArrayList<>();
-        this.completed = false;
-    }
+	@JsonProperty("userId")
+	public void setUserId(String userId) {
+		if (this.user == null) {
+			this.user = new User();
+		}
+		this.user.setUserId(userId);
+	}
 
-    public void endRental(GPSLocation endLocation) {
-        this.endLocation = endLocation;
-        this.endTime = Instant.now();
-        this.completed = true;
-    }
+	public void endRental(GPSLocation endLocation) {
+		this.endLocation = endLocation;
+		this.endTime = Instant.now();
+		this.completed = true;
+	}
 
-    public void addCharge(String chargeType, double amount) {
-        Map<String, Object> charge = new HashMap<>();
-        charge.put("type", chargeType);
-        charge.put("amount", amount);
-        charge.put("timestamp", Instant.now());
-        additionalCharges.add(charge);
-    }
+	public void addCharge(String chargeType, double amount) {
+		Map<String, Object> charge = new HashMap<>();
+		charge.put("type", chargeType);
+		charge.put("amount", amount);
+		charge.put("timestamp", Instant.now());
+		additionalCharges.add(charge);
+	}
 
-    public long getDurationMinutes() {
-        return Duration.between(endTime, startTime).toMinutes();
-    }
+	public long getDurationMinutes() {
+		return Duration.between(endTime, startTime).toMinutes();
+	}
 
-    public Double getTotalAdditionalCharges() {
-        return additionalCharges.stream()
-                .mapToDouble(charge -> ((Number) charge.get("amount")).doubleValue())
-                .sum();
-    }
+	public Double getTotalAdditionalCharges() {
+		return additionalCharges.stream().mapToDouble(charge -> ((Number) charge.get("amount")).doubleValue()).sum();
+	}
 }
