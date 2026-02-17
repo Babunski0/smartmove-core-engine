@@ -42,7 +42,6 @@ public class RentalSession {
 	private String rentalId;
 	private String vehicleId;
 
-	@JsonIgnore
 	private User user;
 
 	private City city;
