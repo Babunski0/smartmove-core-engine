@@ -1,6 +1,5 @@
 package com.smartmove.domain.entity;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.smartmove.domain.enums.City;
 import lombok.AllArgsConstructor;
@@ -52,7 +51,7 @@ public class RentalSession {
 	private GPSLocation startLocation;
 	private GPSLocation endLocation;
 
-	private Double totalCostAmount;
+	private BigDecimal totalCostAmount;
 	private String costCurrency;
 
 	private boolean completed;
