@@ -50,7 +50,7 @@ public class VehicleController {
      */
     @GetMapping
     public ResponseEntity<ApiResponse<List<VehicleListResponse>>> getAllVehicles() {
-        log.info("GET /api/v1/vehicles - Get all vehicles");
+        log.info("GET /api/vehicles - Get all vehicles");
 
         try {
             List<VehicleListResponse> vehicles = vehicleService.getAllVehicles();
@@ -77,7 +77,7 @@ public class VehicleController {
     @GetMapping("/city/{city}")
     public ResponseEntity<ApiResponse<List<VehicleListResponse>>> getVehiclesByCity(
             @PathVariable String city) {
-        log.info("GET /api/v1/vehicles/city/{} - Get vehicles by city", city);
+        log.info("GET /api/vehicles/city/{} - Get vehicles by city", city);
 
         try {
             List<VehicleListResponse> vehicles = vehicleService.getVehiclesByCity(city);
@@ -104,7 +104,7 @@ public class VehicleController {
     @GetMapping("/state/{state}")
     public ResponseEntity<ApiResponse<List<VehicleListResponse>>> getVehiclesByState(
             @PathVariable String state) {
-        log.info("GET /api/v1/vehicles/state/{} - Get vehicles by state", state);
+        log.info("GET /api/vehicles/state/{} - Get vehicles by state", state);
 
         try {
             List<VehicleListResponse> vehicles = vehicleService.getVehiclesByState(state);
@@ -131,7 +131,7 @@ public class VehicleController {
     @GetMapping("/{vehicleId}")
     public ResponseEntity<ApiResponse<VehicleResponse>> getVehicleStatus(
             @PathVariable String vehicleId) {
-        log.info("GET /api/v1/vehicles/{} - Get vehicle status", vehicleId);
+        log.info("GET /api/vehicles/{} - Get vehicle status", vehicleId);
 
         try {
             VehicleResponse vehicle = vehicleService.getVehicleStatus(vehicleId);
@@ -165,7 +165,7 @@ public class VehicleController {
     @PostMapping("/admin/create")
     public ResponseEntity<ApiResponse<VehicleResponse>> createVehicle(
             @Valid @RequestBody CreateVehicleRequest request) {
-        log.info("POST /api/v1/vehicles/admin/create - Create vehicle: {}", request.getVehicleId());
+        log.info("POST /api/vehicles/admin/create - Create vehicle: {}", request.getVehicleId());
 
         try {
             VehicleResponse vehicle = vehicleService.createVehicle(request);
@@ -203,7 +203,7 @@ public class VehicleController {
     public ResponseEntity<ApiResponse<VehicleResponse>> updateVehicle(
             @PathVariable String vehicleId,
             @Valid @RequestBody UpdateVehicleRequest request) {
-        log.info("PATCH /api/v1/vehicles/{} - Update vehicle", vehicleId);
+        log.info("PATCH /api/vehicles/{} - Update vehicle", vehicleId);
 
         try {
             VehicleResponse vehicle = vehicleService.updateVehicle(vehicleId, request);
@@ -232,7 +232,7 @@ public class VehicleController {
     @DeleteMapping("/{vehicleId}")
     public ResponseEntity<ApiResponse<String>> deleteVehicle(
             @PathVariable String vehicleId) {
-        log.info("DELETE /api/v1/vehicles/{} - Delete vehicle", vehicleId);
+        log.info("DELETE /api/vehicles/{} - Delete vehicle", vehicleId);
 
         try {
             vehicleService.deleteVehicle(vehicleId);
@@ -261,7 +261,7 @@ public class VehicleController {
      */
     @GetMapping("/admin/count")
     public ResponseEntity<ApiResponse<Integer>> getVehicleCount() {
-        log.info("GET /api/v1/vehicles/admin/count - Get vehicle count");
+        log.info("GET /api/vehicles/admin/count - Get vehicle count");
 
         try {
             int count = vehicleService.getVehicleCount();
