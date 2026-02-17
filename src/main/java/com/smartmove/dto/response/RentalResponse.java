@@ -4,6 +4,8 @@ import com.smartmove.domain.enums.City;
 import lombok.Builder;
 import lombok.Data;
 
+import java.math.BigDecimal;
+
 @Data
 @Builder
 public class RentalResponse {
@@ -13,7 +15,7 @@ public class RentalResponse {
     private String userId;
     private City city;
     private Long durationMinutes;
-    private Double totalCostAmount;
+    private BigDecimal totalCostAmount;
     private String costCurrency;
     private Boolean completed;
 }
