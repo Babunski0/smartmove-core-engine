@@ -1,5 +1,7 @@
 package com.smartmove.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonSubTypes;
+import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.smartmove.domain.enums.City;
 import com.smartmove.domain.enums.VehicleState;
 import com.smartmove.domain.enums.VehicleType;
@@ -16,6 +18,19 @@ import java.util.List;
  * @created 13.02.2026
  */
 
+/**
+ * Vehicle - Abstract base class for all vehicle types
+ */
+@JsonTypeInfo(
+        use = JsonTypeInfo.Id.NAME,
+        include = JsonTypeInfo.As.PROPERTY,
+        property = "type"
+)
+@JsonSubTypes({
+        @JsonSubTypes.Type(value = Bicycle.class, name = "BICYCLE"),
+        @JsonSubTypes.Type(value = ElectricScooter.class, name = "ELECTRIC_SCOOTER"),
+        @JsonSubTypes.Type(value = Moped.class, name = "MOPED")
+})
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
