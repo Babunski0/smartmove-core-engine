@@ -65,10 +65,13 @@ public class FileBasedVehicleRepository {
             String jsonContent = Files.readString(path);
 
             // Parse JSON to Vehicle array
-            Vehicle[] vehicles = objectMapper.readValue(jsonContent, Vehicle[].class);
+            Vehicle[] vehicles = objectMapper
+                    .readerFor(Vehicle[].class)
+                    .without(com.fasterxml.jackson.databind.DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+                    .readValue(jsonContent);
 
             log.info("Loaded {} vehicles from JSON file", vehicles.length);
-            return Arrays.asList(vehicles);
+            return new ArrayList<>(Arrays.asList(vehicles));
 
         } catch (IOException e) {
             log.error("Error loading vehicles from JSON file: {}", e.getMessage());
@@ -107,6 +110,16 @@ public class FileBasedVehicleRepository {
         log.debug("Saving vehicle: {}", vehicle.getVehicleId());
 
         try {
+        	
+        	if (vehicle.getType() == null && vehicle.getClass() != null) {
+                if (vehicle instanceof com.smartmove.domain.entity.Bicycle) {
+                    vehicle.setType(com.smartmove.domain.enums.VehicleType.BICYCLE);
+                } else if (vehicle instanceof com.smartmove.domain.entity.ElectricScooter) {
+                    vehicle.setType(com.smartmove.domain.enums.VehicleType.ELECTRIC_SCOOTER);
+                } else if (vehicle instanceof com.smartmove.domain.entity.Moped) {
+                    vehicle.setType(com.smartmove.domain.enums.VehicleType.MOPED);
+                }
+            }
             // Load all vehicles
             List<Vehicle> vehicles = loadAllVehicles();
 
@@ -124,6 +137,9 @@ public class FileBasedVehicleRepository {
                 vehicles.add(vehicle);
                 log.debug("Added new vehicle: {}", vehicle.getVehicleId());
             }
+            
+            
+
 
             // Write back to file
             saveAllVehicles(vehicles);
