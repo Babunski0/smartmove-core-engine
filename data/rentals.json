@@ -1,212 +1,291 @@
-[
-  {
-    "rentalId": "rental-001",
-    "vehicleId": "scooter-001",
-    "userId": "user-123",
-    "city": "LONDON",
-    "startTime": 1707849600000,
-    "endTime": 1707853200000,
-    "startLocation": {
-      "latitude": 51.5074,
-      "longitude": -0.1278,
-      "timestamp": 1707849600000
-    },
-    "endLocation": {
-      "latitude": 51.51,
-      "longitude": -0.12,
-      "timestamp": 1707853200000
-    },
-    "totalCostAmount": 12.5,
-    "costCurrency": "GBP",
-    "completed": true,
-    "additionalCharges": [
-      {
-        "type": "CONGESTION_CHARGE",
-        "amount": 8,
-        "timestamp": 1707853200000
-      }
-    ]
+[ {
+  "rentalId" : "rental-001",
+  "vehicleId" : "scooter-001",
+  "user" : {
+    "userId" : "user-001",
+    "firstName" : "John",
+    "lastName" : "Anderson",
+    "email" : "john.anderson@example.com",
+    "phoneNumber" : "+44-7911123456",
+    "homeCity" : "LONDON",
+    "completedRentals" : 12,
+    "averageRating" : 4.8,
+    "fullName" : "John Anderson"
   },
-  {
-    "rentalId": "rental-002",
-    "vehicleId": "bike-003",
-    "userId": "user-456",
-    "city": "STOCKHOLM",
-    "startTime": 1707840000000,
-    "endTime": 0,
-    "startLocation": {
-      "latitude": 59.3293,
-      "longitude": 18.0686,
-      "timestamp": 1707840000000
-    },
-    "endLocation": null,
-    "totalCostAmount": 0,
-    "costCurrency": "SEK",
-    "completed": false,
-    "additionalCharges": []
+  "city" : "LONDON",
+  "startTime" : null,
+  "endTime" : null,
+  "startLocation" : null,
+  "endLocation" : null,
+  "totalCostAmount" : null,
+  "costCurrency" : "GBP",
+  "completed" : false,
+  "additionalCharges" : [ ],
+  "durationMinutes" : 0,
+  "totalAdditionalCharges" : 0.0,
+  "userId" : "user-001"
+}, {
+  "rentalId" : "rental-002",
+  "vehicleId" : "bike-002",
+  "user" : {
+    "userId" : "user-002",
+    "firstName" : "Maria",
+    "lastName" : "Rossi",
+    "email" : "maria.rossi@example.com",
+    "phoneNumber" : "+39-3401234567",
+    "homeCity" : "ROME",
+    "completedRentals" : 8,
+    "averageRating" : 4.5,
+    "fullName" : "Maria Rossi"
   },
-  {
-    "rentalId": "rental-003",
-    "vehicleId": "moped-001",
-    "userId": "user-789",
-    "city": "ROME",
-    "startTime": 1707835200000,
-    "endTime": 1707838800000,
-    "startLocation": {
-      "latitude": 41.9028,
-      "longitude": 12.4964,
-      "timestamp": 1707835200000
-    },
-    "endLocation": {
-      "latitude": 41.905,
-      "longitude": 12.5,
-      "timestamp": 1707838800000
-    },
-    "totalCostAmount": 22.5,
-    "costCurrency": "EUR",
-    "completed": true,
-    "additionalCharges": []
+  "city" : "ROME",
+  "startTime" : null,
+  "endTime" : null,
+  "startLocation" : null,
+  "endLocation" : null,
+  "totalCostAmount" : null,
+  "costCurrency" : "EUR",
+  "completed" : false,
+  "additionalCharges" : [ ],
+  "durationMinutes" : 0,
+  "totalAdditionalCharges" : 0.0,
+  "userId" : "user-002"
+}, {
+  "rentalId" : "rental-003",
+  "vehicleId" : "moped-001",
+  "user" : {
+    "userId" : "user-003",
+    "firstName" : "Anders",
+    "lastName" : "Bergström",
+    "email" : "anders.bergstrom@example.com",
+    "phoneNumber" : "+46-701234567",
+    "homeCity" : "STOCKHOLM",
+    "completedRentals" : 25,
+    "averageRating" : 4.9,
+    "fullName" : "Anders Bergström"
   },
-  {
-    "rentalId": "rental-004",
-    "vehicleId": "scooter-002",
-    "userId": "user-012",
-    "city": "LONDON",
-    "startTime": 1707830400000,
-    "endTime": 0,
-    "startLocation": {
-      "latitude": 51.515,
-      "longitude": -0.115,
-      "timestamp": 1707830400000
-    },
-    "endLocation": null,
-    "totalCostAmount": 0,
-    "costCurrency": "GBP",
-    "completed": false,
-    "additionalCharges": []
+  "city" : "STOCKHOLM",
+  "startTime" : null,
+  "endTime" : null,
+  "startLocation" : null,
+  "endLocation" : null,
+  "totalCostAmount" : null,
+  "costCurrency" : "SEK",
+  "completed" : false,
+  "additionalCharges" : [ ],
+  "durationMinutes" : 0,
+  "totalAdditionalCharges" : 0.0,
+  "userId" : "user-003"
+}, {
+  "rentalId" : "rental-004",
+  "vehicleId" : "scooter-003",
+  "user" : {
+    "userId" : "user-004",
+    "firstName" : "Luigi",
+    "lastName" : "Ferrari",
+    "email" : "luigi.ferrari@example.com",
+    "phoneNumber" : "+39-3361234567",
+    "homeCity" : "MILAN",
+    "completedRentals" : 3,
+    "averageRating" : 4.2,
+    "fullName" : "Luigi Ferrari"
   },
-  {
-    "rentalId": "rental-005",
-    "vehicleId": "scooter-003",
-    "userId": "user-345",
-    "city": "STOCKHOLM",
-    "startTime": 1707825600000,
-    "endTime": 1707829200000,
-    "startLocation": {
-      "latitude": 59.332,
-      "longitude": 18.07,
-      "timestamp": 1707825600000
-    },
-    "endLocation": {
-      "latitude": 59.335,
-      "longitude": 18.075,
-      "timestamp": 1707829200000
-    },
-    "totalCostAmount": 97.5,
-    "costCurrency": "SEK",
-    "completed": true,
-    "additionalCharges": []
+  "city" : "MILAN",
+  "startTime" : null,
+  "endTime" : null,
+  "startLocation" : null,
+  "endLocation" : null,
+  "totalCostAmount" : null,
+  "costCurrency" : "EUR",
+  "completed" : false,
+  "additionalCharges" : [ ],
+  "durationMinutes" : 0,
+  "totalAdditionalCharges" : 0.0,
+  "userId" : "user-004"
+}, {
+  "rentalId" : "rental-005",
+  "vehicleId" : "bike-003",
+  "user" : {
+    "userId" : "user-005",
+    "firstName" : "Sarah",
+    "lastName" : "Mueller",
+    "email" : "sarah.mueller@example.com",
+    "phoneNumber" : "+49-30123456",
+    "homeCity" : "BERLIN",
+    "completedRentals" : 35,
+    "averageRating" : 5.0,
+    "fullName" : "Sarah Mueller"
   },
-  {
-    "rentalId": "rental-006",
-    "vehicleId": "bike-004",
-    "userId": "user-678",
-    "city": "MILAN",
-    "startTime": 1707820800000,
-    "endTime": 1707824400000,
-    "startLocation": {
-      "latitude": 45.4642,
-      "longitude": 9.19,
-      "timestamp": 1707820800000
-    },
-    "endLocation": {
-      "latitude": 45.47,
-      "longitude": 9.195,
-      "timestamp": 1707824400000
-    },
-    "totalCostAmount": 3.5,
-    "costCurrency": "EUR",
-    "completed": true,
-    "additionalCharges": []
+  "city" : "BERLIN",
+  "startTime" : null,
+  "endTime" : null,
+  "startLocation" : null,
+  "endLocation" : null,
+  "totalCostAmount" : null,
+  "costCurrency" : "EUR",
+  "completed" : false,
+  "additionalCharges" : [ ],
+  "durationMinutes" : 0,
+  "totalAdditionalCharges" : 0.0,
+  "userId" : "user-005"
+}, {
+  "rentalId" : "rental-006",
+  "vehicleId" : "moped-002",
+  "user" : {
+    "userId" : "user-006",
+    "firstName" : "Pierre",
+    "lastName" : "Dupont",
+    "email" : "pierre.dupont@example.com",
+    "phoneNumber" : "+33-612345678",
+    "homeCity" : "PARIS",
+    "completedRentals" : 7,
+    "averageRating" : 4.3,
+    "fullName" : "Pierre Dupont"
   },
-  {
-    "rentalId": "rental-007",
-    "vehicleId": "moped-003",
-    "userId": "user-901",
-    "city": "STOCKHOLM",
-    "startTime": 1707816000000,
-    "endTime": 0,
-    "startLocation": {
-      "latitude": 59.335,
-      "longitude": 18.075,
-      "timestamp": 1707816000000
-    },
-    "endLocation": null,
-    "totalCostAmount": 0,
-    "costCurrency": "SEK",
-    "completed": false,
-    "additionalCharges": []
+  "city" : "PARIS",
+  "startTime" : null,
+  "endTime" : null,
+  "startLocation" : null,
+  "endLocation" : null,
+  "totalCostAmount" : null,
+  "costCurrency" : "EUR",
+  "completed" : false,
+  "additionalCharges" : [ ],
+  "durationMinutes" : 0,
+  "totalAdditionalCharges" : 0.0,
+  "userId" : "user-006"
+}, {
+  "rentalId" : "rental-007",
+  "vehicleId" : "scooter-004",
+  "user" : {
+    "userId" : "user-007",
+    "firstName" : "Elena",
+    "lastName" : "Bianchi",
+    "email" : "elena.bianchi@example.com",
+    "phoneNumber" : "+39-3201234567",
+    "homeCity" : "ROME",
+    "completedRentals" : 0,
+    "averageRating" : 0.0,
+    "fullName" : "Elena Bianchi"
   },
-  {
-    "rentalId": "rental-008",
-    "vehicleId": "bike-001",
-    "userId": "user-234",
-    "city": "LONDON",
-    "startTime": 1707811200000,
-    "endTime": 1707814800000,
-    "startLocation": {
-      "latitude": 51.5074,
-      "longitude": -0.1278,
-      "timestamp": 1707811200000
-    },
-    "endLocation": {
-      "latitude": 51.512,
-      "longitude": -0.122,
-      "timestamp": 1707814800000
-    },
-    "totalCostAmount": 5,
-    "costCurrency": "GBP",
-    "completed": true,
-    "additionalCharges": []
+  "city" : "ROME",
+  "startTime" : null,
+  "endTime" : null,
+  "startLocation" : null,
+  "endLocation" : null,
+  "totalCostAmount" : null,
+  "costCurrency" : "EUR",
+  "completed" : false,
+  "additionalCharges" : [ ],
+  "durationMinutes" : 0,
+  "totalAdditionalCharges" : 0.0,
+  "userId" : "user-007"
+}, {
+  "rentalId" : "rental-008",
+  "vehicleId" : "bike-001",
+  "user" : {
+    "userId" : "user-008",
+    "firstName" : "Hans",
+    "lastName" : "Schmidt",
+    "email" : "hans.schmidt@example.com",
+    "phoneNumber" : "+49-301234567",
+    "homeCity" : "BERLIN",
+    "completedRentals" : 18,
+    "averageRating" : 4.7,
+    "fullName" : "Hans Schmidt"
   },
-  {
-    "rentalId": "rental-009",
-    "vehicleId": "scooter-004",
-    "userId": "user-567",
-    "city": "BERLIN",
-    "startTime": 1707806400000,
-    "endTime": 1707810000000,
-    "startLocation": {
-      "latitude": 52.52,
-      "longitude": 13.405,
-      "timestamp": 1707806400000
-    },
-    "endLocation": {
-      "latitude": 52.525,
-      "longitude": 13.41,
-      "timestamp": 1707810000000
-    },
-    "totalCostAmount": 10.5,
-    "costCurrency": "EUR",
-    "completed": true,
-    "additionalCharges": []
+  "city" : "BERLIN",
+  "startTime" : null,
+  "endTime" : null,
+  "startLocation" : null,
+  "endLocation" : null,
+  "totalCostAmount" : null,
+  "costCurrency" : "EUR",
+  "completed" : false,
+  "additionalCharges" : [ ],
+  "durationMinutes" : 0,
+  "totalAdditionalCharges" : 0.0,
+  "userId" : "user-008"
+}, {
+  "rentalId" : "rental-009",
+  "vehicleId" : "moped-003",
+  "user" : {
+    "userId" : "user-009",
+    "firstName" : "Sofia",
+    "lastName" : "Svensson",
+    "email" : "sofia.svensson@example.com",
+    "phoneNumber" : "+46-701999999",
+    "homeCity" : "STOCKHOLM",
+    "completedRentals" : 22,
+    "averageRating" : 4.6,
+    "fullName" : "Sofia Svensson"
   },
-  {
-    "rentalId": "rental-010",
-    "vehicleId": "bike-005",
-    "userId": "user-890",
-    "city": "PARIS",
-    "startTime": 1707801600000,
-    "endTime": 0,
-    "startLocation": {
-      "latitude": 48.8566,
-      "longitude": 2.3522,
-      "timestamp": 1707801600000
-    },
-    "endLocation": null,
-    "totalCostAmount": 0,
-    "costCurrency": "EUR",
-    "completed": false,
-    "additionalCharges": []
-  }
-]
+  "city" : "STOCKHOLM",
+  "startTime" : null,
+  "endTime" : null,
+  "startLocation" : null,
+  "endLocation" : null,
+  "totalCostAmount" : null,
+  "costCurrency" : "SEK",
+  "completed" : false,
+  "additionalCharges" : [ ],
+  "durationMinutes" : 0,
+  "totalAdditionalCharges" : 0.0,
+  "userId" : "user-009"
+}, {
+  "rentalId" : "rental-010",
+  "vehicleId" : "scooter-002",
+  "user" : {
+    "userId" : "user-010",
+    "firstName" : "Marco",
+    "lastName" : "Conti",
+    "email" : "marco.conti@example.com",
+    "phoneNumber" : "+39-3551234567",
+    "homeCity" : "MILAN",
+    "completedRentals" : 11,
+    "averageRating" : 4.4,
+    "fullName" : "Marco Conti"
+  },
+  "city" : "MILAN",
+  "startTime" : null,
+  "endTime" : null,
+  "startLocation" : null,
+  "endLocation" : null,
+  "totalCostAmount" : null,
+  "costCurrency" : "EUR",
+  "completed" : false,
+  "additionalCharges" : [ ],
+  "durationMinutes" : 0,
+  "totalAdditionalCharges" : 0.0,
+  "userId" : "user-010"
+}, {
+  "rentalId" : "175f21ce-833c-4878-bf12-781e62ac4db5",
+  "vehicleId" : "moped-001",
+  "user" : {
+    "userId" : "user-002",
+    "firstName" : "Maria",
+    "lastName" : "Rossi",
+    "email" : "maria.rossi@example.com",
+    "phoneNumber" : "+39-3401234567",
+    "homeCity" : "ROME",
+    "completedRentals" : 8,
+    "averageRating" : 4.5,
+    "fullName" : "Maria Rossi"
+  },
+  "city" : "MILAN",
+  "startTime" : 1771421708.977686800,
+  "endTime" : null,
+  "startLocation" : {
+    "latitude" : 41.9028,
+    "longitude" : 12.4964,
+    "timestamp" : 1707853200000
+  },
+  "endLocation" : null,
+  "totalCostAmount" : null,
+  "costCurrency" : null,
+  "completed" : false,
+  "additionalCharges" : [ ],
+  "durationMinutes" : 0,
+  "totalAdditionalCharges" : 0.0,
+  "userId" : "user-002"
+} ]

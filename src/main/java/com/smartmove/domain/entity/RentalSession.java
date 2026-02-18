@@ -103,7 +103,10 @@ public class RentalSession {
 	}
 
 	public long getDurationMinutes() {
-		return Duration.between(endTime, startTime).toMinutes();
+        if (startTime == null || endTime == null) {
+            return 0;  // Return 0 if not started or not ended yet
+        }
+        return Duration.between(startTime, endTime).toMinutes();
 	}
 
 	public Double getTotalAdditionalCharges() {

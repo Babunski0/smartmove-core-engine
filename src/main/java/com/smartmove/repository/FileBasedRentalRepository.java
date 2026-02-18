@@ -8,6 +8,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Repository;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -15,6 +16,7 @@ import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * @author jniyi
@@ -111,31 +113,24 @@ public class FileBasedRentalRepository {
      */
     public void saveRental(RentalSession rental) {
         log.debug("Saving rental: {}", rental.getRentalId());
-
         try {
-            // Load all rentals
+            // Load existing rentals
             List<RentalSession> rentals = loadAllRentals();
 
-            // Find and update the rental, or add if new
-            boolean found = false;
-            for (int i = 0; i < rentals.size(); i++) {
-                if (rentals.get(i).getRentalId().equals(rental.getRentalId())) {
-                    rentals.set(i, rental);
-                    found = true;
-                    break;
-                }
-            }
+            // Convert to mutable list (List.of() returns immutable list)
+            rentals = new ArrayList<>(rentals);
 
-            if (!found) {
-                rentals.add(rental);
-                log.debug("Added new rental: {}", rental.getRentalId());
-            }
+            // Remove old rental if exists, then add new one
+            rentals = rentals.stream()
+                    .filter(r -> !r.getRentalId().equals(rental.getRentalId()))
+                    .collect(Collectors.toList());
+            rentals.add(rental);
 
-            // Write back to file
-            saveAllRentals(rentals);
-            log.debug("Rental saved successfully: {}", rental.getRentalId());
-
-        } catch (Exception e) {
+            // Save to file
+            File file = new File(rentalsFilePath);
+            objectMapper.writerWithDefaultPrettyPrinter().writeValue(file, rentals);
+            log.info("Rental saved: {}", rental.getRentalId());
+        } catch (IOException e) {
             log.error("Error saving rental: {}", e.getMessage());
             throw new SmartMoveException("Failed to save rental to file", e);
         }
