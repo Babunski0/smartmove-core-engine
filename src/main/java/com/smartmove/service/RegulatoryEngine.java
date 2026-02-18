@@ -1,15 +1,17 @@
 package com.smartmove.service;
 
-/**
- * @author jniyi
- * @project smartmove-core-engine - 2026
- * @created 17.02.2026
- */
 
 import com.smartmove.domain.entity.Vehicle;
 import com.smartmove.domain.enums.City;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Component;
+
+
+/**
+ * @author jniyi
+ * @project smartmove-core-engine - 2026
+ * @created 17.02.2026
+ */
 
 /**
  * RegulatoryEngine - Handles city-specific pricing and rules
@@ -28,12 +30,6 @@ public class RegulatoryEngine {
      * Base price per kilometer for rentals
      */
     private static final double PRICE_PER_KM = 1.50;
-
-    /**
-     * Base hourly rate for rentals
-     * (used if distance calculation not available)
-     */
-    private static final double BASE_HOURLY_RATE = 5.00;
 
     /**
      * City-specific price multipliers

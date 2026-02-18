@@ -4,7 +4,7 @@ import com.smartmove.domain.enums.VehicleState;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-import java.util.Set;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -130,9 +130,52 @@ class StateTransitionValidatorTest {
 
     @Test
     void test_all_transitions_from_each_state() {
+        // Define which transitions are valid for your state machine
+        Map<VehicleState, Set<VehicleState>> validTransitions = new EnumMap<>(VehicleState.class);
+
+        // AVAILABLE: has valid transitions to RESERVED, IN_USE, MAINTENANCE, RELOCATING
+        validTransitions.put(VehicleState.AVAILABLE, Set.of(
+                VehicleState.AVAILABLE,  // Same state
+                VehicleState.RESERVED,   // available_to_reserved_valid
+                VehicleState.IN_USE,     // Inferred from reserved_to_inUse_valid
+                VehicleState.MAINTENANCE,
+                VehicleState.RELOCATING));
+
+        // IN_USE: can go to AVAILABLE or EMERGENCY_LOCK (NOT MAINTENANCE)
+        validTransitions.put(VehicleState.IN_USE, Set.of(
+                VehicleState.IN_USE,           // Same state
+                VehicleState.AVAILABLE,        // inUse_to_available_valid
+                VehicleState.EMERGENCY_LOCK)); // inUse_to_emergencyLock_valid (NOT MAINTENANCE)
+
+        // MAINTENANCE: can only go to AVAILABLE (NOT RELOCATING)
+        validTransitions.put(VehicleState.MAINTENANCE, Set.of(
+                VehicleState.MAINTENANCE,  // Same state
+                VehicleState.AVAILABLE)); // maintenance_to_available_valid (NOT RELOCATING)
+
+        // EMERGENCY_LOCK: can go to MAINTENANCE (NOT AVAILABLE)
+        validTransitions.put(VehicleState.EMERGENCY_LOCK, Set.of(
+                VehicleState.EMERGENCY_LOCK,  // Same state
+                VehicleState.MAINTENANCE));  // emergencyLock_to_maintenance_valid (NOT AVAILABLE)
+
+        // RELOCATING: can go to AVAILABLE
+        validTransitions.put(VehicleState.RELOCATING, Set.of(
+                VehicleState.RELOCATING,  // Same state
+                VehicleState.AVAILABLE)); // relocating_to_available_valid
+
+        // RESERVED: can go to IN_USE or AVAILABLE
+        validTransitions.put(VehicleState.RESERVED, Set.of(
+                VehicleState.RESERVED,  // Same state
+                VehicleState.IN_USE,    // reserved_to_inUse_valid
+                VehicleState.AVAILABLE)); // RESERVED -> AVAILABLE is valid
+
         for (VehicleState current : VehicleState.values()) {
             for (VehicleState next : VehicleState.values()) {
-                validator.isValidTransition(current, next);
+                boolean isValid = validator.isValidTransition(current, next);
+                Set<VehicleState> validNextStates = validTransitions.getOrDefault(current, Collections.emptySet());
+                boolean shouldBeValid = validNextStates.contains(next);
+
+                assertEquals(shouldBeValid, isValid,
+                        "Transition from " + current + " to " + next + " validity mismatch");
             }
         }
     }

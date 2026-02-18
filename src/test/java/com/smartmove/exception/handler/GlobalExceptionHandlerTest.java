@@ -11,6 +11,7 @@ import org.springframework.validation.BeanPropertyBindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 
+import java.lang.reflect.Method;
 import java.util.Map;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -154,16 +155,20 @@ class GlobalExceptionHandlerTest {
 
     private static ApiResponse<?> assertApiResponse(Object body) {
         assertNotNull(body);
-        assertTrue(body instanceof ApiResponse<?>);
+        assertInstanceOf(ApiResponse.class, body);
         return (ApiResponse<?>) body;
     }
 
     private static ErrorResponse assertErrorResponse(Object data) {
         assertNotNull(data);
-        assertTrue(data instanceof ErrorResponse);
+        assertInstanceOf(ErrorResponse.class, data);
         return (ErrorResponse) data;
     }
 
+    /**
+     * Build a MethodArgumentNotValidException with proper MethodParameter
+     * This fixes the NullPointerException by creating a valid MethodParameter
+     */
     private static MethodArgumentNotValidException buildValidationException(Map<String, String> fieldToMessage) {
         Object target = new Object();
         BeanPropertyBindingResult bindingResult = new BeanPropertyBindingResult(target, "target");
@@ -172,7 +177,15 @@ class GlobalExceptionHandlerTest {
                 bindingResult.addError(new FieldError("target", field, message))
         );
 
-        return new MethodArgumentNotValidException((org.springframework.core.MethodParameter) null, bindingResult);
+        try {
+            // Create a valid MethodParameter using reflection
+            Method method = Object.class.getMethod("toString");
+            org.springframework.core.MethodParameter methodParameter =
+                    new org.springframework.core.MethodParameter(method, -1);
 
+            return new MethodArgumentNotValidException(methodParameter, bindingResult);
+        } catch (NoSuchMethodException e) {
+            throw new RuntimeException("Failed to create MethodArgumentNotValidException", e);
+        }
     }
 }
