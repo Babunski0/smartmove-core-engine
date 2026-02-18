@@ -1,5 +1,6 @@
 package com.smartmove.domain.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSubTypes;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 import com.smartmove.domain.enums.City;
@@ -38,6 +39,7 @@ import java.util.List;
 public abstract class Vehicle {
 
     protected String vehicleId;
+    @JsonIgnore
     protected VehicleType type;
     protected City city;
     protected VehicleState currentState;
@@ -48,7 +50,7 @@ public abstract class Vehicle {
     protected long lastTelemetryUpdate;
     protected boolean locked;
 
-    public Vehicle(String vehicleId, VehicleType type, City city,
+    protected Vehicle(String vehicleId, VehicleType type, City city,
                    GPSLocation location) {
         this.vehicleId = vehicleId;
         this.type = type;
