@@ -3,7 +3,6 @@ package com.smartmove.repository;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.smartmove.domain.entity.User;
-import com.smartmove.exception.SmartMoveException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.io.TempDir;

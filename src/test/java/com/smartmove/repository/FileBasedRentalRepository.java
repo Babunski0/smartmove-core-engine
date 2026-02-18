@@ -13,7 +13,6 @@ import org.springframework.test.util.ReflectionTestUtils;
 import java.nio.file.Path;
 import java.time.Instant;
 import java.util.List;
-import java.util.Set;
 import java.util.concurrent.*;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -250,7 +249,9 @@ class FileBasedRentalRepositoryTest {
 
             try {
                 builder.getClass().getMethod("completed", boolean.class).invoke(builder, completed);
-            } catch (NoSuchMethodException ignored) {}
+            } catch (NoSuchMethodException ignored) {
+                // Ignored
+            }
 
             return (RentalSession) builder.getClass().getMethod("build").invoke(builder);
         } catch (Exception ignored) {
@@ -262,7 +263,9 @@ class FileBasedRentalRepositoryTest {
 
                 try {
                     RentalSession.class.getMethod("setCompleted", boolean.class).invoke(r, completed);
-                } catch (NoSuchMethodException ignored2) {}
+                } catch (NoSuchMethodException ignored2) {
+                    // Ignored
+                }
 
                 return r;
             } catch (Exception e) {
@@ -275,6 +278,7 @@ class FileBasedRentalRepositoryTest {
         try {
             target.getClass().getMethod(methodName, argType).invoke(target, value);
         } catch (NoSuchMethodException ignored) {
+            // Method not present on target – ignore intentionally (set only if available)
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

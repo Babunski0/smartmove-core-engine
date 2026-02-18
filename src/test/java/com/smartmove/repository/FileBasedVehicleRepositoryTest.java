@@ -157,9 +157,9 @@ class FileBasedVehicleRepositoryTest {
         List<Vehicle> all = repository.loadAllVehicles();
         assertEquals(3, all.size());
 
-        assertTrue(all.stream().anyMatch(v -> v instanceof Bicycle));
-        assertTrue(all.stream().anyMatch(v -> v instanceof ElectricScooter));
-        assertTrue(all.stream().anyMatch(v -> v instanceof Moped));
+        assertTrue(all.stream().anyMatch(Bicycle.class::isInstance));
+        assertTrue(all.stream().anyMatch(ElectricScooter.class::isInstance));
+        assertTrue(all.stream().anyMatch(Moped.class::isInstance));
     }
 
     @Test

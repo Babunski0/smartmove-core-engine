@@ -6,7 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.test.util.ReflectionTestUtils;
 
 import java.util.concurrent.*;
-import java.util.concurrent.atomic.AtomicBoolean;
+import java.util.concurrent.locks.LockSupport;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -171,10 +171,14 @@ class VehicleLockManagerTest {
     }
 
     private static void sleep(long ms) {
-        try {
-            Thread.sleep(ms);
-        } catch (InterruptedException e) {
-            Thread.currentThread().interrupt();
+        long deadline = System.nanoTime() + TimeUnit.MILLISECONDS.toNanos(ms);
+        while (true) {
+            long remaining = deadline - System.nanoTime();
+            if (remaining <= 0) break;
+            LockSupport.parkNanos(remaining);
+            if (Thread.currentThread().isInterrupted()) {
+                break;
+            }
         }
     }
 

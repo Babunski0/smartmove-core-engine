@@ -10,8 +10,9 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
-import org.springframework.web.servlet.NoHandlerFoundException;
 
+
+import java.io.IOException;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -19,172 +20,168 @@ import java.util.Map;
 @Slf4j
 public class GlobalExceptionHandler {
 
+    // Error type constants
+    private static final String BAD_REQUEST = "Bad Request";
+    private static final String CONFLICT = "Conflict";
+    private static final String INVALID_ARGUMENT = "Invalid Argument";
+    private static final String NULL_POINTER_ERROR = "Null Pointer Error";
+    private static final String INTERNAL_SERVER_ERROR = "Internal Server Error";
+    private static final String IO_ERROR = "IO Error";
+    private static final String VALIDATION_FAILED = "Validation Failed";
+    private static final String SERVICE_UNAVAILABLE = "Service Unavailable";
+
+    // Message constants
+    private static final String VEHICLE_NOT_AVAILABLE_MSG = "Vehicle is not available for this operation";
+    private static final String VALIDATION_FAILED_MSG = "Request validation failed. Please check the field errors";
+    private static final String VALIDATION_REQUEST_MSG = "Request validation failed";
+    private static final String INVALID_ARGUMENT_MSG = "Invalid argument provided";
+    private static final String INTERNAL_SERVER_ERROR_MSG = "An unexpected error occurred. Please contact support if the problem persists";
+    private static final String LOCK_TIMEOUT_MSG = "Resource is temporarily locked, please retry";
+    private static final String IO_ERROR_MSG = "An error occurred while reading/writing data";
+    private static final String IO_ERROR_RESPONSE_MSG = "IO error occurred";
+    private static final String GENERIC_ERROR_RESPONSE_MSG = "An unexpected error occurred";
+    private static final String INTERNAL_SERVER_ERROR_RESPONSE_MSG = "Internal server error";
+    private static final String UNEXPECTED_ERROR_MSG = "An unexpected error occurred while processing your request";
+
+    // Header constants
+    private static final String RETRY_AFTER_HEADER = "Retry-After";
+    private static final String RETRY_AFTER_SECONDS = "5";
+
     /**
-     * Handle SmartMoveException - Base custom exception
+     * Helper method to build ErrorResponse
+     * Eliminates code duplication across exception handlers
      *
-     * HTTP Status: 400 Bad Request
-     *
-     * @param ex The exception
-     * @return ApiResponse with error details
+     * @param status HTTP status code
+     * @param error Error type/category
+     * @param message Error message
+     * @return ErrorResponse object
      */
-    @ExceptionHandler(SmartMoveException.class)
-    public ResponseEntity<?> handleSmartMoveException(SmartMoveException ex) {
-        log.error("SmartMoveException occurred: {}", ex.getMessage(), ex);
-        ErrorResponse errorResponse = ErrorResponse.builder()
-                .status(HttpStatus.BAD_REQUEST.value())
-                .error("Bad Request")
-                .message(ex.getMessage())
+    private ErrorResponse buildErrorResponse(int status, String error, String message) {
+        return ErrorResponse.builder()
+                .status(status)
+                .error(error)
+                .message(message)
                 .timestamp(System.currentTimeMillis())
                 .build();
+    }
 
-        ApiResponse<?> response = ApiResponse.builder()
+    /**
+     * Helper method to build ErrorResponse with field errors
+     *
+     * @param status HTTP status code
+     * @param error Error type/category
+     * @param message Error message
+     * @param fieldErrors Map of field validation errors
+     * @return ErrorResponse object
+     */
+    private ErrorResponse buildErrorResponseWithFieldErrors(int status, String error, String message, Map<String, String> fieldErrors) {
+        return ErrorResponse.builder()
+                .status(status)
+                .error(error)
+                .message(message)
+                .fieldErrors(fieldErrors)
+                .timestamp(System.currentTimeMillis())
+                .build();
+    }
+
+    /**
+     * Helper method to build ApiResponse with error data
+     * Eliminates code duplication across exception handlers
+     *
+     * @param errorResponse The error response object
+     * @param message User-facing message
+     * @return ApiResponse containing the error response
+     */
+    private ApiResponse<ErrorResponse> buildErrorApiResponse(ErrorResponse errorResponse, String message) {
+        return ApiResponse.<ErrorResponse>builder()
                 .success(false)
-                .message(ex.getMessage())
+                .message(message)
                 .data(errorResponse)
                 .timestamp(System.currentTimeMillis())
                 .build();
+    }
 
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    /**
+     * Handle SmartMoveException (Custom Application Exception)
+     * Returns 400 BAD_REQUEST status
+     *
+     * @param ex SmartMoveException thrown
+     * @return ResponseEntity with error details and 400 status
+     */
+    @ExceptionHandler(SmartMoveException.class)
+    public ResponseEntity<ApiResponse<ErrorResponse>> handleSmartMoveException(SmartMoveException ex) {
+        log.error("SmartMoveException occurred: {}", ex.getMessage(), ex);
+
+        ErrorResponse errorResponse = buildErrorResponse(
+                HttpStatus.BAD_REQUEST.value(),
+                BAD_REQUEST,
+                ex.getMessage()
+        );
+
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(buildErrorApiResponse(errorResponse, ex.getMessage()));
     }
 
     /**
      * Handle VehicleNotAvailableException
+     * Returns 409 CONFLICT status
      *
-     * HTTP Status: 409 Conflict (vehicle not in correct state)
-     *
-     * @param ex The exception
-     * @return ApiResponse with error details
+     * @param ex VehicleNotAvailableException thrown
+     * @return ResponseEntity with error details and 409 status
      */
     @ExceptionHandler(VehicleNotAvailableException.class)
-    public ResponseEntity<?> handleVehicleNotAvailableException(VehicleNotAvailableException ex) {
-        log.warn("Vehicle not available: {}", ex.getMessage());
+    public ResponseEntity<ApiResponse<ErrorResponse>> handleVehicleNotAvailableException(
+            VehicleNotAvailableException ex) {
+        log.error("VehicleNotAvailableException occurred: {}", ex.getMessage(), ex);
 
-        ErrorResponse errorResponse = ErrorResponse.builder()
-                .status(HttpStatus.CONFLICT.value())
-                .error("Conflict")
-                .message(ex.getMessage())
-                .timestamp(System.currentTimeMillis())
-                .build();
+        ErrorResponse errorResponse = buildErrorResponse(
+                HttpStatus.CONFLICT.value(),
+                CONFLICT,
+                ex.getMessage()
+        );
 
-        ApiResponse<?> response = ApiResponse.builder()
-                .success(false)
-                .message("Vehicle is not available for this operation")
-                .data(errorResponse)
-                .timestamp(System.currentTimeMillis())
-                .build();
-
-        return ResponseEntity.status(HttpStatus.CONFLICT).body(response);
+        return ResponseEntity
+                .status(HttpStatus.CONFLICT)
+                .body(buildErrorApiResponse(errorResponse, VEHICLE_NOT_AVAILABLE_MSG));
     }
 
     /**
-     * Handle RentalNotFoundException
+     * Handle LockAcquisitionException
+     * Returns 503 SERVICE_UNAVAILABLE status with Retry-After header
      *
-     * HTTP Status: 404 Not Found
-     *
-     * @param ex The exception
-     * @return ApiResponse with error details
-     */
-    @ExceptionHandler(RentalNotFoundException.class)
-    public ResponseEntity<?> handleRentalNotFoundException(RentalNotFoundException ex) {
-        log.warn("Rental not found: {}", ex.getMessage());
-
-        ErrorResponse errorResponse = ErrorResponse.builder()
-                .status(HttpStatus.NOT_FOUND.value())
-                .error("Not Found")
-                .message(ex.getMessage())
-                .timestamp(System.currentTimeMillis())
-                .build();
-
-        ApiResponse<?> response = ApiResponse.builder()
-                .success(false)
-                .message("Rental session not found")
-                .data(errorResponse)
-                .timestamp(System.currentTimeMillis())
-                .build();
-
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
-    }
-
-    /**
-     * Handle LockAcquisitionException - Cannot acquire lock
-     *
-     * HTTP Status: 503 Service Unavailable (resource temporarily locked)
-     * Includes Retry-After header suggesting client to retry after 5 seconds
-     *
-     * @param ex The exception
-     * @return ApiResponse with error details and retry header
+     * @param ex LockAcquisitionException thrown
+     * @return ResponseEntity with error details and 503 status
      */
     @ExceptionHandler(LockAcquisitionException.class)
-    public ResponseEntity<?> handleLockAcquisitionException(LockAcquisitionException ex) {
-        log.warn("Failed to acquire lock: {}", ex.getMessage());
+    public ResponseEntity<ApiResponse<ErrorResponse>> handleLockAcquisitionException(
+            LockAcquisitionException ex) {
+        log.error("LockAcquisitionException occurred: {}", ex.getMessage(), ex);
 
-        ErrorResponse errorResponse = ErrorResponse.builder()
-                .status(HttpStatus.SERVICE_UNAVAILABLE.value())
-                .error("Service Unavailable")
-                .message(ex.getMessage())
-                .timestamp(System.currentTimeMillis())
-                .build();
-
-        ApiResponse<?> response = ApiResponse.builder()
-                .success(false)
-                .message("Resource is temporarily locked, please retry")
-                .data(errorResponse)
-                .timestamp(System.currentTimeMillis())
-                .build();
+        ErrorResponse errorResponse = buildErrorResponse(
+                HttpStatus.SERVICE_UNAVAILABLE.value(),
+                SERVICE_UNAVAILABLE,
+                ex.getMessage()
+        );
 
         return ResponseEntity
                 .status(HttpStatus.SERVICE_UNAVAILABLE)
-                .header("Retry-After", "5")  // Suggest retry after 5 seconds
-                .body(response);
+                .header(RETRY_AFTER_HEADER, RETRY_AFTER_SECONDS)
+                .body(buildErrorApiResponse(errorResponse, LOCK_TIMEOUT_MSG));
     }
 
     /**
-     * Handle QueueFullException - Telemetry queue is full
+     * Handle Validation Errors from @Valid annotation
+     * Returns 400 BAD_REQUEST status with detailed field errors
      *
-     * HTTP Status: 503 Service Unavailable (queue overloaded)
-     * Includes Retry-After header suggesting client to retry after 10 seconds
-     *
-     * @param ex The exception
-     * @return ApiResponse with error details and retry header
-     */
-    @ExceptionHandler(QueueFullException.class)
-    public ResponseEntity<?> handleQueueFullException(QueueFullException ex) {
-        log.warn("Queue is full: {}", ex.getMessage());
-
-        ErrorResponse errorResponse = ErrorResponse.builder()
-                .status(HttpStatus.SERVICE_UNAVAILABLE.value())
-                .error("Service Unavailable")
-                .message(ex.getMessage())
-                .timestamp(System.currentTimeMillis())
-                .build();
-
-        ApiResponse<?> response = ApiResponse.builder()
-                .success(false)
-                .message("Service is temporarily overloaded, please retry")
-                .data(errorResponse)
-                .timestamp(System.currentTimeMillis())
-                .build();
-
-        return ResponseEntity
-                .status(HttpStatus.SERVICE_UNAVAILABLE)
-                .header("Retry-After", "10")  // Suggest retry after 10 seconds
-                .body(response);
-    }
-
-    /**
-     * Handle Validation Errors - @Valid annotation validation failures
-     *
-     * HTTP Status: 400 Bad Request
-     * Includes field-level error messages
-     *
-     * @param ex The MethodArgumentNotValidException
-     * @return ApiResponse with field errors
+     * @param ex MethodArgumentNotValidException thrown
+     * @return ResponseEntity with field validation errors and 400 status
      */
     @ExceptionHandler(MethodArgumentNotValidException.class)
-    public ResponseEntity<?> handleMethodArgumentNotValidException(MethodArgumentNotValidException ex) {
-        log.warn("Validation error occurred");
+    public ResponseEntity<ApiResponse<ErrorResponse>> handleMethodArgumentNotValidException(
+            MethodArgumentNotValidException ex) {
+        log.warn("Validation error occurred: {}", ex.getMessage());
 
-        // Extract field errors
         Map<String, String> fieldErrors = new HashMap<>();
         ex.getBindingResult().getAllErrors().forEach(error -> {
             String fieldName = ((FieldError) error).getField();
@@ -192,80 +189,112 @@ public class GlobalExceptionHandler {
             fieldErrors.put(fieldName, errorMessage);
         });
 
-        ErrorResponse errorResponse = ErrorResponse.builder()
-                .status(HttpStatus.BAD_REQUEST.value())
-                .error("Validation Failed")
-                .message("Request validation failed")
-                .timestamp(System.currentTimeMillis())
-                .fieldErrors(fieldErrors)
-                .build();
+        ErrorResponse errorResponse = buildErrorResponseWithFieldErrors(
+                HttpStatus.BAD_REQUEST.value(),
+                VALIDATION_FAILED,
+                VALIDATION_REQUEST_MSG,
+                fieldErrors
+        );
 
-        ApiResponse<?> response = ApiResponse.builder()
+        ApiResponse<ErrorResponse> response = ApiResponse.<ErrorResponse>builder()
                 .success(false)
-                .message("Request validation failed. Please check the field errors")
+                .message(VALIDATION_FAILED_MSG)
                 .data(errorResponse)
                 .timestamp(System.currentTimeMillis())
                 .build();
 
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(response);
     }
 
     /**
-     * Handle 404 Not Found - Endpoint not found
+     * Handle IllegalArgumentException
+     * Returns 400 BAD_REQUEST status
      *
-     * HTTP Status: 404 Not Found
-     *
-     * @param ex The NoHandlerFoundException
-     * @return ApiResponse with error details
+     * @param ex IllegalArgumentException thrown
+     * @return ResponseEntity with error details and 400 status
      */
-    @ExceptionHandler(NoHandlerFoundException.class)
-    public ResponseEntity<?> handleNoHandlerFoundException(NoHandlerFoundException ex) {
-        log.warn("Endpoint not found: {} {}", ex.getHttpMethod(), ex.getRequestURL());
+    @ExceptionHandler(IllegalArgumentException.class)
+    public ResponseEntity<ApiResponse<ErrorResponse>> handleIllegalArgumentException(
+            IllegalArgumentException ex) {
+        log.error("IllegalArgumentException occurred: {}", ex.getMessage(), ex);
 
-        ErrorResponse errorResponse = ErrorResponse.builder()
-                .status(HttpStatus.NOT_FOUND.value())
-                .error("Not Found")
-                .message("The requested endpoint does not exist")
-                .timestamp(System.currentTimeMillis())
-                .build();
+        ErrorResponse errorResponse = buildErrorResponse(
+                HttpStatus.BAD_REQUEST.value(),
+                INVALID_ARGUMENT,
+                ex.getMessage()
+        );
 
-        ApiResponse<?> response = ApiResponse.builder()
-                .success(false)
-                .message("Endpoint not found")
-                .data(errorResponse)
-                .timestamp(System.currentTimeMillis())
-                .build();
-
-        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(buildErrorApiResponse(errorResponse, INVALID_ARGUMENT_MSG));
     }
 
     /**
-     * Handle all other exceptions - Catch-all for unexpected errors
+     * Handle NullPointerException
+     * Returns 500 INTERNAL_SERVER_ERROR status
      *
-     * HTTP Status: 500 Internal Server Error
-     * Does NOT expose stack trace to client (logged server-side only)
+     * @param ex NullPointerException thrown
+     * @return ResponseEntity with error details and 500 status
+     */
+    @ExceptionHandler(NullPointerException.class)
+    public ResponseEntity<ApiResponse<ErrorResponse>> handleNullPointerException(NullPointerException ex) {
+        log.error("NullPointerException occurred: {}", ex.getMessage(), ex);
+
+        ErrorResponse errorResponse = buildErrorResponse(
+                HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                NULL_POINTER_ERROR,
+                UNEXPECTED_ERROR_MSG
+        );
+
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(buildErrorApiResponse(errorResponse, INTERNAL_SERVER_ERROR_RESPONSE_MSG));
+    }
+
+    /**
+     * Handle IOException (file read/write errors)
+     * Returns 500 INTERNAL_SERVER_ERROR status
      *
-     * @param ex The generic Exception
-     * @return ApiResponse with generic error message
+     * @param ex IOException thrown
+     * @return ResponseEntity with error details and 500 status
+     */
+    @ExceptionHandler(IOException.class)
+    public ResponseEntity<ApiResponse<ErrorResponse>> handleIOException(IOException ex) {
+        log.error("IOException occurred: {}", ex.getMessage(), ex);
+
+        ErrorResponse errorResponse = buildErrorResponse(
+                HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                IO_ERROR,
+                IO_ERROR_MSG
+        );
+
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(buildErrorApiResponse(errorResponse, IO_ERROR_RESPONSE_MSG));
+    }
+
+    /**
+     * Handle all other generic Exceptions (catch-all handler)
+     * Returns 500 INTERNAL_SERVER_ERROR status
+     * This should be the last handler as it catches all remaining exceptions
+     *
+     * @param ex Exception thrown
+     * @return ResponseEntity with error details and 500 status
      */
     @ExceptionHandler(Exception.class)
-    public ResponseEntity<?> handleGenericException(Exception ex) {
-        log.error("Unexpected error occurred", ex);
+    public ResponseEntity<ApiResponse<ErrorResponse>> handleGenericException(Exception ex) {
+        log.error("Unexpected exception occurred: {}", ex.getMessage(), ex);
 
-        ErrorResponse errorResponse = ErrorResponse.builder()
-                .status(HttpStatus.INTERNAL_SERVER_ERROR.value())
-                .error("Internal Server Error")
-                .message("An unexpected error occurred. Please contact support if the problem persists")
-                .timestamp(System.currentTimeMillis())
-                .build();
+        ErrorResponse errorResponse = buildErrorResponse(
+                HttpStatus.INTERNAL_SERVER_ERROR.value(),
+                INTERNAL_SERVER_ERROR,
+                INTERNAL_SERVER_ERROR_MSG
+        );
 
-        ApiResponse<?> response = ApiResponse.builder()
-                .success(false)
-                .message("An unexpected error occurred")
-                .data(errorResponse)
-                .timestamp(System.currentTimeMillis())
-                .build();
-
-        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+        return ResponseEntity
+                .status(HttpStatus.INTERNAL_SERVER_ERROR)
+                .body(buildErrorApiResponse(errorResponse, GENERIC_ERROR_RESPONSE_MSG));
     }
 }
