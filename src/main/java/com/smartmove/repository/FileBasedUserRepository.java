@@ -110,6 +110,20 @@ public class FileBasedUserRepository {
             throw new SmartMoveException("Failed to write users to file", e);
         }
     }
+    
+    public List<User> findUsersByCity(String city) {
+        log.debug("Finding users in city: {}", city);
+
+        try {
+            return loadAllUsers().stream()
+                    .filter(u -> u.getHomeCity() != null && u.getHomeCity().name().equals(city))
+                    .toList();
+        } catch (Exception e) {
+            log.error("Error finding users by city: {}", e.getMessage());
+            throw new SmartMoveException("Failed to find users by city", e);
+        }
+    }
+
 
     public void deleteUser(String userId) {
         log.debug("Deleting user: {}", userId);
