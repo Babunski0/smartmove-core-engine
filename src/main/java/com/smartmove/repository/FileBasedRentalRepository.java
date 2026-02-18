@@ -71,7 +71,7 @@ public class FileBasedRentalRepository {
             RentalSession[] rentals = objectMapper.readValue(jsonContent, RentalSession[].class);
 
             log.info("Loaded {} rentals from JSON file", rentals.length);
-            return Arrays.asList(rentals);
+            return new ArrayList<>(Arrays.asList(rentals));
 
         } catch (IOException e) {
             log.error("Error loading rentals from JSON file: {}", e.getMessage());
